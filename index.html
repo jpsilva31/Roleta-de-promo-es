@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Roleta de Promoção</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <h1>𝑹𝑶𝑳𝑬𝑻𝑨 𝑫𝑬 𝑷𝑹𝑶𝑴𝑶𝑪̧𝑶̃𝑬𝑺 𝑫𝑨 𝑺𝑬𝑨!</h1>
+
+
+  <div class="container">
+    <!-- Seta (aponta para dentro da roleta) -->
+    <div class="seta-direita" aria-hidden="true"></div>
+
+    <!-- Roleta -->
+    <canvas id="roleta" width="300" height="300"></canvas>
+
+    <!-- Imagem sobreposta (decorativa). Se não carregar, oculta-se. -->
+    <img
+      src="imagens/20% OFF.png"
+      alt=""
+      class="roleta-imagem"
+      aria-hidden="true"
+      onerror="this.style.display='none';"
+    />
+
+    <!-- Resultado -->
+    <div id="resultado" class="resultado-caixa" role="status" aria-live="polite"></div>
+
+
+    <!-- Botão -->
+    <button id="btnGirar">Girar</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,112 @@
+/* Base */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #222;
+  color: white;
+  text-align: center;
+}
+
+body {
+  background-image: url("imagens/imagem 3.jpg"); /* Caminho da imagem */
+  background-size: cover;         /* Preenche toda a tela */
+  background-position: center;    /* Centraliza */
+  background-attachment: fixed;   /* Fixa ao rolar */
+}
+
+/* Container da roleta */
+.container {
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+}
+
+/* Imagem sobreposta (mesmo tamanho do canvas) */
+.roleta-imagem {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  pointer-events: none;
+  object-fit: contain;   /* ajusta imagem dentro do círculo */
+  display: block;
+  z-index: 2;            /* acima do canvas */
+}
+
+/* Canvas da roleta */
+#roleta {
+  border-radius: 50%;
+  background: transparent;
+  display: block;
+}
+
+
+/* Seta à direita apontando para DENTRO (para a esquerda) */
+.seta-direita {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 10px);         /* ligeiramente à direita da borda do canvas */
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  /* triângulo apontando para a esquerda (para dentro da roleta) */
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 25px solid yellow; /* seta aponta para a esquerda */
+  z-index: 3;                      /* acima do canvas e da imagem */
+}
+
+/* Caixa de resultado (verde-escuro) */
+.resultado-caixa {
+  display: none;                 /* fica oculta até ter resultado */
+  margin: 15px auto 0;
+  padding: 12px 16px;
+  max-width: 260px;
+  background-color: #2b5951;     /* verde-escuro da SEA */
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.12);
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+
+/* Botão */
+button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff5722;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #e64a19;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #02420d;         /* cor do texto */
+  margin-top: 20px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;    /* espaçamento entre letras */
+}
+
+
+
+
+
+
+
+
+
