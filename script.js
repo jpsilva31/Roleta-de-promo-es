@@ -4,23 +4,6 @@ const btnGirar = document.getElementById("btnGirar");
 const resultadoCaixa = document.getElementById("resultado");
 
 // -------------------------
-// Ajuste de nitidez (Retina)
-// -------------------------
-function ajustarDPR(canvas, ctx) {
-  const dpr = window.devicePixelRatio || 1;
-  // Largura/altura em CSS já estão no atributo width/height do canvas
-  const cssW = canvas.width;
-  const cssH = canvas.height;
-  // dimensiona o buffer interno
-  canvas.width = cssW * dpr;
-  canvas.height = cssH * dpr;
-  // aplica escala
-  ctx.scale(dpr, dpr);
-  // IMPORTANTE: após escalar, trabalhamos sempre em coordenadas CSS (300x300)
-}
-ajustarDPR(canvas, ctx);
-
-// -------------------------
 // Configurações
 // -------------------------
 const setores = ["10% OFF", "20% OFF", "30% OFF", "40% OFF", "50% OFF", "Brinde"];
@@ -30,14 +13,35 @@ let anguloAtual = 0;    // em radianos
 let girando = false;
 
 // -------------------------
+// Responsividade do canvas
+// -------------------------
+// Define o tamanho lógico do canvas (atributos) com base no tamanho visual (CSS) e no DPR
+function ajustarDPR() {
+  const dpr = window.devicePixelRatio || 1;
+  // tamanho visual (CSS) do canvas (em px)
+  const sizeCSS = Math.min(window.innerWidth * 0.9, 360); // 90vw até máx 360px
+  // aplica também à imagem sobreposta (mantemos pelo CSS)
+
+  // Ajusta atributos do canvas (buffer interno)
+  canvas.width = Math.floor(sizeCSS * dpr);
+  canvas.height = Math.floor(sizeCSS * dpr);
+
+  // Reseta transformações e escala para coordenadas CSS
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+}
+
+// -------------------------
 // Desenho da roleta
 // -------------------------
 function desenharRoleta() {
-  const cx = 150;
-  const cy = 150;
-  const r = 150;
+  // tamanho visual (CSS) calculado a partir do estilo (mesmo que usamos no CSS)
+  const size = Math.min(window.innerWidth * 0.9, 360);
+  const cx = size / 2;
+  const cy = size / 2;
+  const r  = size / 2;
 
-  ctx.clearRect(0, 0, 300, 300);
+  ctx.clearRect(0, 0, size, size);
 
   // Sem linhas entre setores
   ctx.lineWidth = 0;
@@ -60,8 +64,8 @@ function desenharRoleta() {
     ctx.translate(cx, cy);
     ctx.rotate(anguloInicio + tamanhoSetor / 2);
     ctx.textAlign = "right";
-    ctx.fillStyle = "#010a0eff";
-    ctx.font = "bold 14px Arial";
+    ctx.fillStyle = "#220650ff"; // <<< troque aqui se quiser mudar a cor do texto
+    ctx.font = `bold ${Math.max(12, size * 0.047)}px Arial`; // escala a fonte ~14px quando size=300
     ctx.fillText(setores[i], r - 10, 5);
     ctx.restore();
   }
@@ -90,6 +94,7 @@ function girarRoleta() {
     // Converte para radianos e normaliza
     anguloAtual = ((giroTotalGraus * easing) * Math.PI / 180) % (2 * Math.PI);
 
+    ajustarDPR();   // garante nitidez durante a animação em dispositivos com DPR alto
     desenharRoleta();
 
     if (progresso < 1) {
@@ -113,17 +118,19 @@ function mostrarResultado() {
   const anguloSobSeta = (2 * Math.PI - (anguloAtual % (2 * Math.PI)) + anguloSeta) % (2 * Math.PI);
   const indice = Math.floor(anguloSobSeta / tamanhoSetor) % setores.length;
 
-  resultadoCaixa.textContent = "Resultado: " + setores[indice];
-  resultadoCaixa.style.display = "inline-block"; // <-- exibe a caixa
+  resultadoCaixa.textContent = "você conseguiu: " + setores[indice];
+  resultadoCaixa.style.display = "inline-block"; // exibe a caixa
 }
 
+// -------------------------
+// Inicialização + resize
+// -------------------------
+function render() {
+  ajustarDPR();
+  desenharRoleta();
+}
 
-// -------------------------
-// Inicialização
-// -------------------------
-desenharRoleta();
+window.addEventListener('resize', render, { passive: true });
+render();
+
 btnGirar.addEventListener("click", girarRoleta);
-
-
-
-
