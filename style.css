@@ -1,115 +1,126 @@
-/* Base */
+/* Reset básico */
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+
+/* Fundo com imagem */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #222;
-  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  background: url("imagens/imagem 3.jpg") center/cover no-repeat fixed;
+  background-color: #121212;
+}
+
+/* Evita gagueira de scroll em alguns iOS com background fixed */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
+/* Centraliza tudo no meio da tela */
+.hero {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* Cartão que agrupa imagem + botão */
+.card {
+  display: grid;
+  gap: 16px;
+  justify-items: center;
   text-align: center;
-  margin: 0;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+  max-width: min(92vw, 560px);
+  width: 100%;
 }
 
-body {
-  background-image: url("imagens/imagem 3.jpg");
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-
-/* Container da roleta */
-.container {
-  position: relative;
-  display: inline-block;
-  margin: 20px auto 0;
-}
-
-/* Canvas da roleta — o tamanho visual é feito via CSS (percentual da tela) */
-#roleta {
-  border-radius: 50%;
-  background: transparent;
+/* Imagem responsiva */
+.hero-img {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
   display: block;
-  width: min(90vw, 360px);   /* ocupa até 90% da largura da tela, com limite em 360px */
-  height: min(90vw, 360px);  /* mantém quadrado */
-  position: relative;
-  z-index: 1;                /* abaixo da imagem sobreposta */
+  border-radius: 12px;
+  object-fit: contain;
+  background: #00000020;
 }
 
-/* Imagem sobreposta: acompanha o canvas automaticamente */
-.roleta-imagem {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: min(90vw, 360px);
-  height: min(90vw, 360px);
-  border-radius: 50%;
-  pointer-events: none;
-  object-fit: contain; /* use 'cover' se quiser preencher totalmente */
-  z-index: 2;
+/* Botão principal */
+.cta-btn {
+  width: 100%;
+  max-width: 340px;
+  padding: 14px 18px;
+  font-size: clamp(16px, 2.8vw, 18px);
+  font-weight: 800;
+  letter-spacing: .3px;
+  text-transform: none;
+  color: #ffffff;
+  background: #2b5951;
+  border: 1px solid #1f403a;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform .06s ease, filter .2s ease;
+  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  touch-action: manipulation;
+}
+.cta-btn:hover { filter: brightness(1.08); }
+.cta-btn:active { transform: translateY(1px); }
+.cta-btn:focus { outline: 2px solid #7fd1c9; outline-offset: 3px; }
+
+/* --- Layout da roleta --- */
+#roleta-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
 }
 
-/* Seta à direita apontando para DENTRO; dimensões responsivas com clamp */
-.seta-direita {
-  position: absolute;
-  top: 47%;
-  left: calc(100% + 10px);
-  transform: translateY(-50%);
+/* Canvas responsivo: largura limitada a 500px no desktop,
+   e 92vw no mobile, mantendo proporção. */
+#roleta {
+  display: block;
+  width: min(92vw, 500px);
+  height: auto;
+  /* evita qualquer antialiasing forçado em alguns navegadores */
+  image-rendering: auto;
+}
+
+/* Ponteiro com escala via CSS var setada no JS (base 500px) */
+:root { --ps: 1; } /* pointer scale */
+.pointer {
+  transform: rotate(180deg);
   width: 0;
   height: 0;
-
-  /* Triângulo para esquerda (dentro) com tamanho que escala no mobile */
-  border-top: clamp(8px, 2.5vw, 15px) solid transparent;
-  border-bottom: clamp(8px, 2.5vw, 15px) solid transparent;
-  border-right: clamp(12px, 4vw, 25px) solid yellow;
-
-  /* faz a ponta entrar levemente no círculo */
-  margin-left: -5px;
-  z-index: 3;
+  border-left: calc(12px * var(--ps)) solid transparent;
+  border-right: calc(12px * var(--ps)) solid transparent;
+  border-bottom: calc(18px * var(--ps)) solid #013b20; /* seta para baixo */
+  margin-bottom: calc(8px * var(--ps));
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.35));
 }
 
-/* Caixa de resultado (verde-escuro) */
-.resultado-caixa {
-  display: none;
-  margin: 15px auto 0;
-  padding: 12px 16px;
-  max-width: 260px;
-  background-color: #2b5951;
-  color: #ffffff;
-  font-size: 18px;
+/* Resultado do giro */
+.resultado {
+  margin: 0;
   font-weight: 700;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0,0,0,.35);
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.12);
   text-align: center;
-  letter-spacing: 0.2px;
+  max-width: min(92vw, 560px);
 }
 
-/* Botão */
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #ff5722;
-  border: none;
-  color: white;
-  cursor: pointer;
+/* Respeito a acessibilidade: reduz animação quando preferido */
+@media (prefers-reduced-motion: reduce) {
+  .cta-btn { transition: none; }
 }
-button:hover { background-color: #e64a19; }
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-
-/* Título */
-h1 {
-  text-align: center;
-  font-size: clamp(1.4rem, 3vw, 2rem);
-  font-weight: 700;
-  color: #0f3301;
-  margin: 20px auto 10px;
-  letter-spacing: 1px;
-}
-
-
-
-
-
-
-
-
 
 

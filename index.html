@@ -2,41 +2,37 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Roleta de Promoção</title>
-  <link rel="stylesheet" href="style.css"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Promoção</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>ROLETA DE PROMOÇÕES DA SEA!</h1>
+  <main class="hero">
+    <!-- Card inicial com imagem + botão -->
+    <div class="card" id="card-container">
+      <img
+        src="imagens/SEA.png"
+        alt="Imagem da promoção"
+        class="hero-img"
+      />
+      <button id="cta" class="cta-btn">Revele Sua Oferta</button>
+    </div>
 
-
-  <div class="container">
-    <!-- Seta (aponta para dentro da roleta) -->
-    <div class="seta-direita" aria-hidden="true"></div>
-
-    <!-- Roleta -->
-    <canvas id="roleta" width="300" height="300"></canvas>
-
-    <!-- Imagem sobreposta (decorativa). Se não carregar, oculta-se. -->
-    <img
-      src="imagens/20% OFF.png"
-      alt=""
-      class="roleta-imagem"
-      aria-hidden="true"
-      onerror="this.style.display='none';"
-    />
-
-    <!-- Resultado -->
-    <div id="resultado" class="resultado-caixa" role="status" aria-live="polite"></div>
-
-
-    <!-- Botão -->
-    <button id="btnGirar">Girar</button>
-  </div>
+    <!-- Container da roleta (inicialmente oculto) -->
+    <div id="roleta-container" style="display:none;">
+      <div class="pointer" aria-hidden="true"></div>
+      <canvas id="roleta"></canvas>
+      <button id="girar" class="cta-btn">Girar</button>
+      <p id="resultado" class="resultado" role="status" aria-live="polite"></p>
+    </div>
+  </main>
 
   <script src="script.js"></script>
 </body>
 </html>
+
+
+
 
 
 
